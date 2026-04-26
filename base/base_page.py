@@ -4,6 +4,7 @@ import allure
 from selenium.common import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,14 +25,13 @@ class BasePage:
         )
         self.action = ActionChains(driver)
 
-    def is_opened(self) -> None:
+    def is_opened(self) -> bool:
         with allure.step(f"Страница {self.PAGE_PATH} открыта"):
-            self.wait.until(EC.url_contains(self.PAGE_PATH))
+            return self.wait.until(EC.url_contains(self.PAGE_PATH))
 
+    @allure.step("Открыть страницу")
     def open(self) -> None:
-        with allure.step(f"Открыть страницу {self.PAGE_PATH}"):
-            self.driver.get(self.PAGE_PATH)
-            self.is_opened()
+        self.driver.get(self.PAGE_PATH)
 
     def refresh(self) -> None:
         self.driver.refresh()
@@ -60,7 +60,7 @@ class BasePage:
     ) -> list[WebElement]:
         with allure.step(f"Поиск всех элементов: {locator_name or locator}"):
             wait = WebDriverWait(self.driver, timeout) if timeout else self.wait
-            return wait.until(EC.visibility_of_all_elements_located(locator))
+            return wait.until(EC.presence_of_element_located(locator))
 
     def count_elements(
         self, locator: tuple[str, str], locator_name: Optional[str] = None
@@ -74,7 +74,7 @@ class BasePage:
         self, locator: tuple[str, str], locator_name: Optional[str] = None
     ) -> None:
         with allure.step(f"Прокрутить до '{locator_name or locator}'"):
-            element = self.wait.until(EC.presence_of_element_located(locator))
+            element = self.wait.until(EC.visibility_of_element_located(locator))
             self.driver.execute_script(
                 "arguments[0].scrollIntoView({block: 'center'});", element
             )
@@ -101,7 +101,7 @@ class BasePage:
         with allure.step(f"Получить текст из '{locator_name or locator}'"):
             return self.wait.until(EC.visibility_of_element_located(locator)).text
 
-    def send_keys(
+    def clear_and_send_keys(
         self,
         locator: tuple[str, str],
         text: Union[str, int],

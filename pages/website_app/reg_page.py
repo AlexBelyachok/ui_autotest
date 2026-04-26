@@ -4,7 +4,7 @@ import allure
 from selenium.webdriver.support import expected_conditions as EC
 
 from base.base_page import BasePage
-from config import Links
+from config.config import Links
 
 
 class RegPage(BasePage):
@@ -29,9 +29,9 @@ class RegPage(BasePage):
 
     def enter_reg_data(self, data: dict[str, str]) -> None:
         with allure.step(f"Заполнить данные username и password"):
-            self.send_keys(self.FLD_USERNAME, data["username"], "username")
-            self.send_keys(self.FLD_PASSWORD, data["password"], "password")
-            self.send_keys(
+            self.clear_and_send_keys(self.FLD_USERNAME, data["username"], "username")
+            self.clear_and_send_keys(self.FLD_PASSWORD, data["password"], "password")
+            self.clear_and_send_keys(
                 self.LBL_USER_DESCRIPTION, data["username"], "username* description"
             )
 

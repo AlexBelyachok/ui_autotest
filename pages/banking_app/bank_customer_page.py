@@ -4,7 +4,7 @@ import allure
 from selenium.webdriver.remote.webelement import WebElement
 
 from base.base_page import BasePage
-from config import Links
+from config.config import Links
 from utils.wait import wait_to_change
 
 
@@ -84,7 +84,7 @@ class BankCustomerPage(BasePage):
 
         with allure.step(f"Ввод суммы {amount} и нажатие подтверждения"):
             self.find_element(self.WAIT_DEPOSIT_FORM, "сообщение amount")
-            self.send_keys(self.FLD_AMOUNT, str(amount))
+            self.clear_and_send_keys(self.FLD_AMOUNT, str(amount))
             self.click(self.BTN_SUBMIT, "отправить")
 
     def make_withdrawal(self, amount: int) -> None:
@@ -92,7 +92,7 @@ class BankCustomerPage(BasePage):
 
         with allure.step(f"Ввод суммы {amount} и нажатие подтверждения"):
             self.find_element(self.WAIT_WITHDRAW_FORM, "сообщение amount")
-            self.send_keys(self.FLD_AMOUNT, str(amount))
+            self.clear_and_send_keys(self.FLD_AMOUNT, str(amount))
             self.click(self.BTN_SUBMIT, "отправить")
 
     def get_all_transactions_data(self) -> list[dict[str, Any]]:

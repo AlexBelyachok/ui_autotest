@@ -1,7 +1,7 @@
 import allure
 
 from base.base_page import BasePage
-from config import Links
+from config.config import Links
 
 
 class MainPage(BasePage):

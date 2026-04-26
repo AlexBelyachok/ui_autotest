@@ -13,7 +13,7 @@ class Config(BaseSettings):
     )
     default_time_out: float = 15
     poll_frequency: float = 1
-    headless: bool = True
+    headless: bool = False
     selenium_remote_url: str | None = None
 
     model_config = SettingsConfigDict(

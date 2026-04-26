@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Optional, Sized
 
 import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 
 from base.base_page import BasePage
-from config import Links
+from config.config import Links
 
 
 class BankFormPage(BasePage):
@@ -30,7 +30,7 @@ class BankFormPage(BasePage):
     BTN_SUBMIT = ("css selector", "button[type='submit']")
     LBL_SUCCESS_MSG = ("id", "successMessage")
 
-    def get_longest_hobby(self) -> str:
+    def get_longest_hobby(self) -> Sized:
         with allure.step("Программное вычисление самого длинного хобби"):
             hobbies = self.find_elements(self.CHK_HOBBIES)
             return max(
@@ -63,19 +63,19 @@ class BankFormPage(BasePage):
         gender: Optional[str] = None,
     ) -> None:
         with allure.step(f"Заполнить форму регистрации полностью"):
-            self.send_keys(
+            self.clear_and_send_keys(
                 self.FLD_FIRST_NAME, user_data["first_name"], "поле firstname"
             )
-            self.send_keys(self.FLD_LAST_NAME, user_data["last_name"], "поле lastname")
-            self.send_keys(self.FLD_EMAIL, user_data["email"], "поле email")
-            self.send_keys(self.FLD_PASSWORD, user_data["password"], "поле password")
+            self.clear_and_send_keys(self.FLD_LAST_NAME, user_data["last_name"], "поле lastname")
+            self.clear_and_send_keys(self.FLD_EMAIL, user_data["email"], "поле email")
+            self.clear_and_send_keys(self.FLD_PASSWORD, user_data["password"], "поле password")
             if hobby:
                 self.select_hobby(hobby)
             if gender:
                 self.select_gender(gender)
 
             if about:
-                self.send_keys(
+                self.clear_and_send_keys(
                     self.AREA_ABOUT,
                     f"Самое длинное слово из предложенных хобби - '{about}'",
                     "поле About Yourself",

@@ -4,7 +4,7 @@ import allure
 from selenium.webdriver.support import expected_conditions as EC
 
 from base.base_page import BasePage
-from config import Links
+from config.config import Links
 
 
 class BankManagerPage(BasePage):
@@ -39,9 +39,9 @@ class BankManagerPage(BasePage):
     # --- Методы для Add Customer ---
     def enter_data_and_send(self, data: dict[str, str]) -> None:
         with allure.step(f"Ввести данные клиента: {data['first_name']}"):
-            self.send_keys(self.FLD_FIRST_NAME, data["first_name"], "имя")
-            self.send_keys(self.FLD_LAST_NAME, data["last_name"], "фамилия")
-            self.send_keys(self.FLD_POST_CODE, data["post_code"], "индекс")
+            self.clear_and_send_keys(self.FLD_FIRST_NAME, data["first_name"], "имя")
+            self.clear_and_send_keys(self.FLD_LAST_NAME, data["last_name"], "фамилия")
+            self.clear_and_send_keys(self.FLD_POST_CODE, data["post_code"], "индекс")
             self.click(self.BTN_SUBMIT, "кнопка подтверждения")
 
     def click_add_customer(self) -> None:
