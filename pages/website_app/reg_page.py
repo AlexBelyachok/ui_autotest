@@ -27,13 +27,13 @@ class RegPage(BasePage):
     LBL_SUCCESS_MSG = ("xpath", "//p[1]")
     LBL_ERROR_MSG = ("css selector", ".alert-danger")
 
+    @allure.step("Заполнить данные username и password")
     def enter_reg_data(self, data: dict[str, str]) -> None:
-        with allure.step(f"Заполнить данные username и password"):
-            self.clear_and_send_keys(self.FLD_USERNAME, data["username"], "username")
-            self.clear_and_send_keys(self.FLD_PASSWORD, data["password"], "password")
-            self.clear_and_send_keys(
-                self.LBL_USER_DESCRIPTION, data["username"], "username* description"
-            )
+        self.clear_and_send_keys(self.FLD_USERNAME, data["username"], "username")
+        self.clear_and_send_keys(self.FLD_PASSWORD, data["password"], "password")
+        self.clear_and_send_keys(
+        self.LBL_USER_DESCRIPTION, data["username"], "username* description"
+    )
 
     def wait_until_invisible(
         self, locator: tuple[str, str], locator_name: Optional[str] = None

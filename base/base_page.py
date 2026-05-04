@@ -24,10 +24,9 @@ class BasePage:
             driver, settings.default_time_out, settings.poll_frequency
         )
         self.action = ActionChains(driver)
-
+    @allure.step("Страница {self.PAGE_PATH} открыта")
     def is_opened(self) -> bool:
-        with allure.step(f"Страница {self.PAGE_PATH} открыта"):
-            return self.wait.until(EC.url_contains(self.PAGE_PATH))
+        return self.wait.until(EC.url_contains(self.PAGE_PATH))
 
     @allure.step("Открыть страницу")
     def open(self) -> None:
@@ -69,7 +68,7 @@ class BasePage:
             f"Посчитать количество элементов по локатору {locator_name or locator}"
         ):
             return len(self.driver.find_elements(*locator))
-
+    @allure.step("Прокрутить до элемента '{locator_name}'")
     def scroll_to_element(
         self, locator: tuple[str, str], locator_name: Optional[str] = None
     ) -> None:
@@ -79,11 +78,9 @@ class BasePage:
                 "arguments[0].scrollIntoView({block: 'center'});", element
             )
 
-    def click(
-        self, locator: tuple[str, str], locator_name: Optional[str] = None
-    ) -> None:
-        with allure.step(f"Кликнуть на '{locator_name or locator}'"):
-            self.wait.until(EC.element_to_be_clickable(locator)).click()
+    @allure.step("Кликнуть на '{locator_name}'")
+    def click(self, locator: tuple[str, str], locator_name: Optional[str] = None) -> None:
+        self.wait.until(EC.element_to_be_clickable(locator)).click()
 
     def element_is_visible(
         self, locator: tuple[str, str], locator_name: Optional[str] = None
@@ -100,7 +97,7 @@ class BasePage:
     ) -> str:
         with allure.step(f"Получить текст из '{locator_name or locator}'"):
             return self.wait.until(EC.visibility_of_element_located(locator)).text
-
+    @allure.step("Ввести текст в '{name}")
     def clear_and_send_keys(
         self,
         locator: tuple[str, str],
@@ -112,6 +109,7 @@ class BasePage:
             element.clear()
             element.send_keys(str(text))
 
+    @allure.step("Выбрать {text} в списке '{name}'")
     def select_by_text(
         self, locator: tuple[str, str], text: str, name: Optional[str] = None
     ) -> None:

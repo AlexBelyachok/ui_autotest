@@ -20,7 +20,6 @@ class BankFormPage(BasePage):
     FLD_PASSWORD = ("id", "password")
 
     # --- Селекторы и чекбоксы ---
-    # WARNING: Чекбоксы не имеют ID, выбираем через группу лейблов
     CHK_HOBBIES = ("xpath", "//div[@class='checkbox-group']/label")
 
     SEL_GENDER = ("id", "gender")
@@ -30,13 +29,13 @@ class BankFormPage(BasePage):
     BTN_SUBMIT = ("css selector", "button[type='submit']")
     LBL_SUCCESS_MSG = ("id", "successMessage")
 
+    @allure.step("Вычислить самое длинное хобби")
     def get_longest_hobby(self) -> Sized:
-        with allure.step("Программное вычисление самого длинного хобби"):
             hobbies = self.find_elements(self.CHK_HOBBIES)
             return max(
                 (hobby.text.strip() for hobby in hobbies if hobby.text.strip()), key=len
             )
-
+    @allure.step("Выбрать хобби: {target_hobby}")
     def select_hobby(self, target_hobby: str) -> None:
         hobbies = self.find_elements(self.CHK_HOBBIES)
         for hobby in hobbies:
@@ -45,8 +44,8 @@ class BankFormPage(BasePage):
                 return
         raise AssertionError(f"Хобби '{target_hobby}' не найдено в списке!")
 
+    @allure.step("Выбрать пол из списка: {target_gender}")
     def select_gender(self, target_gender: str) -> None:
-        with allure.step(f"Выбрать пол из списка: {target_gender}"):
             select_element = self.find_element(
                 self.SEL_GENDER, "выпадающий список Gender"
             )
@@ -55,6 +54,7 @@ class BankFormPage(BasePage):
 
             select.select_by_visible_text(target_gender)
 
+    @allure.step("Заполнить форму регистрации")
     def fill_registration_form(
         self,
         user_data: dict[str, str],
@@ -62,7 +62,6 @@ class BankFormPage(BasePage):
         about: Optional[str] = None,
         gender: Optional[str] = None,
     ) -> None:
-        with allure.step(f"Заполнить форму регистрации полностью"):
             self.clear_and_send_keys(
                 self.FLD_FIRST_NAME, user_data["first_name"], "поле firstname"
             )
@@ -80,7 +79,6 @@ class BankFormPage(BasePage):
                     f"Самое длинное слово из предложенных хобби - '{about}'",
                     "поле About Yourself",
                 )
-
+    @allure.step("Нажать кнопку регистрации")
     def click_register(self) -> None:
-        with allure.step("Кликнуть на кнопку 'Register'"):
             self.wait.until(EC.element_to_be_clickable(self.BTN_SUBMIT)).click()

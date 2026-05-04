@@ -4,6 +4,10 @@ from selenium import webdriver
 
 from config.pydantic_config import settings
 
+pytest_plugins = [
+    "utils.customer_fixtures",
+    "utils.register_fixtures",
+]
 
 @pytest.fixture(scope="function", autouse=True)
 def driver(request):
@@ -47,3 +51,4 @@ def pytest_runtest_makereport(item, call):
                 name=f"Screenshot_{report.nodeid}",
                 attachment_type=allure.attachment_type.PNG,
             )
+

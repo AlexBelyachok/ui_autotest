@@ -45,25 +45,23 @@ class BankCustomerPage(BasePage):
         name = f"{customer_dict['first_name']} {customer_dict['last_name']}"
         self.select_by_text(self.SELECT_USER, text=name)
 
+    @allure.step("Проверить, что текущий пользователь: {customer_dict[first_name]} {customer_dict[last_name]}")
     def is_current_user(self, customer_dict: dict[str, str]) -> bool:
         full_name = f"{customer_dict['first_name']} {customer_dict['last_name']}"
+        try:
+            self.wait.until(
+                lambda driver: full_name in self.get_text(self.TXT_WELCOME_USER),
+                message=f"Имя {full_name} не появилось в приветствии",
+            )
+            return True
+        except:
+            actual_text = self.get_text(self.TXT_WELCOME_USER)
+            allure.attach(actual_text, name="Фактическое приветствие")
+            return False
 
-        with allure.step(f"Проверить, что текущий пользователь: {full_name}"):
-            try:
-                self.wait.until(
-                    lambda driver: full_name in self.get_text(self.TXT_WELCOME_USER),
-                    message=f"Имя {full_name} не появилось в приветствии",
-                )
-                return True
-            except:
-                actual_text = self.get_text(self.TXT_WELCOME_USER)
-                allure.attach(actual_text, name="Фактическое приветствие")
-                return False
-
+    @allure.step("Войти в кабинет клиента: {data[first_name]}")
     def login_as_customer(self, data: dict[str, str]) -> None:
-        with allure.step(f"Вход в кабинет клиента: {data['first_name']}"):
             self.open()
-
             self.select_your_name(data)
             self.click(self.BTN_SUBMIT, "кнопка Login")
 
@@ -78,7 +76,6 @@ class BankCustomerPage(BasePage):
         element = self.driver.find_element(*self.LBL_STATUS_MSG)
         return element.get_attribute("ng-hide") == "true" or not element.is_displayed()
 
-    # --- Сценарии ---
     def make_deposit(self, amount: int) -> None:
         self.click(self.TAB_DEPOSIT, "Deposit")
 
@@ -133,9 +130,9 @@ class BankCustomerPage(BasePage):
                 get_rows, error_message="Данные не появились после refresh"
             )
 
+    @allure.step("Ожидание обновления баланса до {expected_value}")
     def wait_for_balance(self, expected_value: int) -> bool:
-        with allure.step(f"Ожидание обновления баланса до {expected_value}"):
-            return self.wait.until(
-                lambda d: self.get_balance() == expected_value,
-                message=f"Баланс не обновился до {expected_value}. Текущий: {self.get_balance()}",
-            )
+        return self.wait.until(
+            lambda d: self.get_balance() == expected_value,
+            message=f"Баланс не обновился до {expected_value}. Текущий: {self.get_balance()}",
+        )
