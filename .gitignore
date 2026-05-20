@@ -5,3 +5,7 @@ __pycache__/
 .env/
 .idea/
 .vscode/
+cookies.pkl
+test_data.xlsx
+test_data.xls
+allure-results/

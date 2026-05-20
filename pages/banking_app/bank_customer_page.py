@@ -45,7 +45,7 @@ class BankCustomerPage(BasePage):
         name = f"{customer_dict['first_name']} {customer_dict['last_name']}"
         self.select_by_text(self.SELECT_USER, text=name)
 
-    @allure.step("Проверить, что текущий пользователь: {customer_dict[first_name]} {customer_dict[last_name]}")
+    @allure.step("Проверить, что текущий пользователь валиден")
     def is_current_user(self, customer_dict: dict[str, str]) -> bool:
         full_name = f"{customer_dict['first_name']} {customer_dict['last_name']}"
         try:

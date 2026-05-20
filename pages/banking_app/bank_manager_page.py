@@ -36,7 +36,7 @@ class BankManagerPage(BasePage):
             f"//td[contains(text(), '{name}')]/following-sibling::td/button[text()='Delete']",
         )
 
-    @allure.step("Ввести данные клиента: {data['first_name']}")
+    @allure.step("Ввести данные клиента")
     def enter_data_and_send(self, data: dict[str, str]) -> None:
             self.clear_and_send_keys(self.FLD_FIRST_NAME, data["first_name"], "имя")
             self.clear_and_send_keys(self.FLD_LAST_NAME, data["last_name"], "фамилия")
@@ -57,7 +57,7 @@ class BankManagerPage(BasePage):
             self.click(self.SEL_CUSTOMER, "список клиентов")
             self.select_by_text(self.SEL_CUSTOMER, full_name, "Customer")
 
-    @allure.step("Выбрать валюту: {currency_value}")
+    @allure.step("Выбрать валюту")
     def select_currency(self, currency_value: str) -> None:
             self.click(self.SEL_CURRENCY, "список валют")
             self.select_by_text(self.SEL_CURRENCY, currency_value, "Currency")
@@ -76,7 +76,7 @@ class BankManagerPage(BasePage):
         self.click(self.BTN_SUBMIT)
         self.grab_alert()
 
-    @allure.step("Поиск клиента по тексту: {text}")
+    @allure.step("Поиск клиента по тексту")
     def search_customer(self, text: str = "") -> None:
             self.find_element(self.INPUT_SEARCH).clear()
             self.find_element(self.INPUT_SEARCH).send_keys(text)
@@ -92,7 +92,7 @@ class BankManagerPage(BasePage):
                 return False
             return False
 
-    @allure.step("Нажать кнопку Delete для клиента: {name}")
+    @allure.step("Нажать кнопку Delete для клиента")
     def click_delete_customer(self, name: str) -> None:
             locator = self.DELETE_BUTTON_BY_NAME(name)
             self.click(locator, f"кнопка Delete для {name}")
