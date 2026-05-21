@@ -59,7 +59,7 @@ class BasePage:
     ) -> list[WebElement]:
         with allure.step(f"Поиск всех элементов: {locator_name or locator}"):
             wait = WebDriverWait(self.driver, timeout) if timeout else self.wait
-            return wait.until(EC.presence_of_element_located(locator))
+            return wait.until(EC.presence_of_all_elements_located(locator))
 
     def count_elements(
         self, locator: tuple[str, str], locator_name: Optional[str] = None
